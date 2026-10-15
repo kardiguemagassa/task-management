@@ -63,6 +63,7 @@ public class TaskController {
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable Long id, Model model) {
         Task task = getTaskOrThrow(id);
+        model.addAttribute("taskId", id);
 
         model.addAttribute("task", task);
         model.addAttribute("statuses", TaskStatus.values());
@@ -82,6 +83,7 @@ public class TaskController {
         Task existingTask = getTaskOrThrow(id);
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("taskId", id);
             model.addAttribute("statuses", TaskStatus.values());
             return "tasks/form";
         }

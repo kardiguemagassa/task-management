@@ -7,12 +7,12 @@
 </head>
 <body>
 
-<h1 th:text="${task.id == null} ? 'Créer une tâche' : 'Modifier une tâche'">
+<h1 th:text="${taskId == null} ? 'Créer une tâche' : 'Modifier une tâche'">
   Formulaire
 </h1>
 
 <form th:object="${task}"
-      th:action="${task.id == null} ? @{/tasks} : @{/tasks/{id}(id=${task.id})}"
+      th:action="${taskId == null} ? @{/tasks} : @{/tasks/{id}(id=${taskId})}"
       method="post">
 
   <div>
