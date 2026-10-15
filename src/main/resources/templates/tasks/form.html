@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Formulaire de tâche</title>
+</head>
+<body>
+
+<h1 th:text="${task.id == null} ? 'Créer une tâche' : 'Modifier une tâche'">
+  Formulaire
+</h1>
+
+<form th:object="${task}"
+      th:action="${task.id == null} ? @{/tasks} : @{/tasks/{id}(id=${task.id})}"
+      method="post">
+
+  <div>
+    <label for="title">Titre *</label>
+    <input type="text" id="title" th:field="*{title}" required>
+
+    <p th:if="${#fields.hasErrors('title')}"
+       th:errors="*{title}"></p>
+  </div>
+
+  <div>
+    <label for="description">Description</label>
+    <textarea id="description" th:field="*{description}"></textarea>
+  </div>
+
+  <div>
+    <label for="dueDate">Date d'échéance</label>
+    <input type="date" id="dueDate" th:field="*{dueDate}">
+  </div>
+
+  <div>
+    <label for="status">Statut</label>
+    <select id="status" th:field="*{status}">
+      <option th:each="status : ${statuses}"
+              th:value="${status}"
+              th:text="${status}">
+      </option>
+    </select>
+  </div>
+
+  <button type="submit">Enregistrer</button>
+  <a th:href="@{/tasks}">Annuler</a>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mes tâches</title>
+</head>
+<body>
+<h1>Gestion des tâches</h1>
+
+<p th:if="${successMessage}" th:text="${successMessage}"></p>
+
+<a th:href="@{/tasks/new}">Ajouter une tâche</a>
+
+<p th:if="${#lists.isEmpty(tasks)}">
+    Aucune tâche pour le moment.
+</p>
+
+<table th:unless="${#lists.isEmpty(tasks)}" border="1">
+    <thead>
+    <tr>
+        <th>Titre</th>
+        <th>Description</th>
+        <th>Échéance</th>
+        <th>Statut</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="task : ${tasks}">
+        <td th:text="${task.title}"></td>
+        <td th:text="${task.description}"></td>
+        <td th:text="${task.dueDate}"></td>
+        <td th:text="${task.status}"></td>
+        <td>
+            <a th:href="@{/tasks/{id}/edit(id=${task.id})}">
+                Modifier
+            </a>
+
+            <form th:action="@{/tasks/{id}/delete(id=${task.id})}"
+                  method="post"
+                  style="display:inline">
+                <button type="submit">Supprimer</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
