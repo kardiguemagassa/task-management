@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 
@@ -10,13 +11,16 @@
 
 <body>
 
+<!-- Header -->
 <div th:replace="~{fragments/header :: header}"></div>
 
 <main class="container">
 
+    <!-- En-tête de la page -->
     <section class="page-header">
         <div>
             <h1>Gestion des tâches</h1>
+
             <p class="page-subtitle">
                 Organisez vos tâches et suivez votre progression.
             </p>
@@ -34,8 +38,10 @@
          th:text="${successMessage}">
     </div>
 
-    <!-- État vide -->
-    <section th:if="${#lists.isEmpty(tasks)}" class="empty-state">
+    <!-- État vide : aucune tâche -->
+    <section th:if="${#lists.isEmpty(tasks)}"
+             class="empty-state">
+
         <div class="empty-icon">✓</div>
 
         <h2>Aucune tâche pour le moment</h2>
@@ -48,10 +54,12 @@
         <a th:href="@{/tasks/new}" class="btn btn-primary">
             Créer ma première tâche
         </a>
+
     </section>
 
-    <!-- Liste des tâches -->
-    <section th:unless="${#lists.isEmpty(tasks)}" class="card">
+    <!-- Tableau des tâches -->
+    <section th:unless="${#lists.isEmpty(tasks)}"
+             class="card">
 
         <div class="card-header">
             <h2>Mes tâches</h2>
@@ -63,6 +71,7 @@
         </div>
 
         <div class="table-responsive">
+
             <table class="task-table">
 
                 <thead>
@@ -76,21 +85,26 @@
                 </thead>
 
                 <tbody>
+
                 <tr th:each="task : ${tasks}">
 
+                    <!-- Titre -->
                     <td class="task-title"
                         th:text="${task.title}">
                         Titre de la tâche
                     </td>
 
+                    <!-- Description -->
                     <td th:text="${#strings.isEmpty(task.description) ? '—' : task.description}">
                         Description
                     </td>
 
+                    <!-- Date d'échéance -->
                     <td th:text="${task.dueDate != null ? task.dueDate : '—'}">
                         —
                     </td>
 
+                    <!-- Statut -->
                     <td>
                         <span class="status-badge"
                               th:classappend="${task.status.name() == 'TO_DO'} ? ' status-todo' : (${task.status.name() == 'IN_PROGRESS'} ? ' status-progress' : ' status-done')"
@@ -99,17 +113,22 @@
                         </span>
                     </td>
 
+                    <!-- Actions -->
                     <td>
                         <div class="task-actions">
 
+                            <!-- Modifier -->
                             <a th:href="@{/tasks/{id}/edit(id=${task.id})}"
                                class="btn btn-secondary btn-sm">
                                 Modifier
                             </a>
 
+                            <!-- Supprimer -->
                             <form th:action="@{/tasks/{id}/delete(id=${task.id})}"
                                   method="post"
-                                  class="delete-form">
+                                  class="delete-form"
+                                  data-confirm-delete
+                                  th:attr="data-task-title=${task.title}">
 
                                 <button type="submit"
                                         class="btn btn-danger btn-sm">
@@ -122,17 +141,21 @@
                     </td>
 
                 </tr>
+
                 </tbody>
 
             </table>
+
         </div>
 
     </section>
 
 </main>
 
+<!-- Footer -->
 <div th:replace="~{fragments/footer :: footer}"></div>
 
+<!-- JavaScript -->
 <script th:src="@{/js/app.js}" defer></script>
 
 </body>
