@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<header th:fragment="header" class="app-header">
+    <div class="container header-content">
+
+        <a th:href="@{/tasks}" class="logo">
+            <span class="logo-icon">✓</span>
+            <span th:text="#{app.name}">TaskFlow</span>
+        </a>
+
+        <nav class="main-nav" aria-label="Navigation principale">
+
+            <a th:href="@{/tasks}"
+               th:text="#{nav.tasks}">
+                Mes tâches
+            </a>
+
+            <a th:href="@{/tasks/new}"
+               th:text="#{nav.new}">
+                Nouvelle tâche
+            </a>
+
+            <div class="language-switcher">
+
+                <a th:href="@{''(lang='fr')}"
+                   th:classappend="${#locale.language == 'fr'} ? ' active' : ''"
+                   lang="fr"
+                   aria-label="Français">
+                    FR
+                </a>
+
+                <span aria-hidden="true">|</span>
+
+                <a th:href="@{''(lang='en')}"
+                   th:classappend="${#locale.language == 'en'} ? ' active' : ''"
+                   lang="en"
+                   aria-label="English">
+                    EN
+                </a>
+
+            </div>
+
+        </nav>
+
+    </div>
+</header>
+
+</body>
+</html>

@@ -1,50 +1,207 @@
+
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      th:lang="${#locale.language}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Mes tâches</title>
+
+    <title th:text="#{tasks.list} + ' | TaskFlow'">
+        Mes tâches | TaskFlow
+    </title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
-<h1>Gestion des tâches</h1>
 
-<p th:if="${successMessage}" th:text="${successMessage}"></p>
+<!-- Header -->
+<div th:replace="~{fragments/header :: header}"></div>
 
-<a th:href="@{/tasks/new}">Ajouter une tâche</a>
+<main class="container">
 
-<p th:if="${#lists.isEmpty(tasks)}">
-    Aucune tâche pour le moment.
-</p>
+    <!-- En-tête de la page -->
+    <section class="page-header">
 
-<table th:unless="${#lists.isEmpty(tasks)}" border="1">
-    <thead>
-    <tr>
-        <th>Titre</th>
-        <th>Description</th>
-        <th>Échéance</th>
-        <th>Statut</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="task : ${tasks}">
-        <td th:text="${task.title}"></td>
-        <td th:text="${task.description}"></td>
-        <td th:text="${task.dueDate}"></td>
-        <td th:text="${task.status}"></td>
-        <td>
-            <a th:href="@{/tasks/{id}/edit(id=${task.id})}">
-                Modifier
-            </a>
+        <div>
+            <h1 th:text="#{tasks.title}">
+                Gestion des tâches
+            </h1>
 
-            <form th:action="@{/tasks/{id}/delete(id=${task.id})}"
-                  method="post"
-                  style="display:inline">
-                <button type="submit">Supprimer</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+            <p class="page-subtitle"
+               th:text="#{tasks.subtitle}">
+                Organisez vos tâches et suivez votre progression.
+            </p>
+        </div>
+
+        <a th:href="@{/tasks/new}"
+           class="btn btn-primary"
+           th:text="#{tasks.add}">
+            + Ajouter une tâche
+        </a>
+
+    </section>
+
+    <!-- Message de succès -->
+    <div th:if="${successMessage}"
+         class="alert alert-success"
+         role="status"
+         th:text="${successMessage}">
+    </div>
+
+    <!-- Aucune tâche -->
+    <section th:if="${#lists.isEmpty(tasks)}"
+             class="empty-state">
+
+        <div class="empty-icon">✓</div>
+
+        <h2 th:text="#{tasks.empty.title}">
+            Aucune tâche pour le moment
+        </h2>
+
+        <p th:text="#{tasks.empty.description}">
+            Commencez par créer votre première tâche
+            pour organiser votre travail.
+        </p>
+
+        <a th:href="@{/tasks/new}"
+           class="btn btn-primary"
+           th:text="#{tasks.empty.button}">
+            Créer ma première tâche
+        </a>
+
+    </section>
+
+    <!-- Liste des tâches -->
+    <section th:unless="${#lists.isEmpty(tasks)}"
+             class="card">
+
+        <!-- En-tête du tableau -->
+        <div class="card-header">
+
+            <h2 th:text="#{tasks.list}">
+                Mes tâches
+            </h2>
+
+            <span class="task-count"
+                  th:text="#{tasks.count(${#lists.size(tasks)})}">
+                0 tâche(s)
+            </span>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="task-table">
+
+                <!-- Colonnes -->
+                <thead>
+                <tr>
+                    <th th:text="#{task.title}">
+                        Titre
+                    </th>
+
+                    <th th:text="#{task.description}">
+                        Description
+                    </th>
+
+                    <th th:text="#{task.dueDate}">
+                        Échéance
+                    </th>
+
+                    <th th:text="#{task.status}">
+                        Statut
+                    </th>
+
+                    <th th:text="#{task.actions}">
+                        Actions
+                    </th>
+                </tr>
+                </thead>
+
+                <!-- Tâches -->
+                <tbody>
+
+                <tr th:each="task : ${tasks}">
+
+                    <!-- Titre -->
+                    <td class="task-title"
+                        th:text="${task.title}">
+                        Titre de la tâche
+                    </td>
+
+                    <!-- Description -->
+                    <td th:text="${#strings.isEmpty(task.description) ? '—' : task.description}">
+                        Description
+                    </td>
+
+                    <!-- Date d'échéance -->
+                    <td th:text="${task.dueDate != null ? task.dueDate : '—'}">
+                        —
+                    </td>
+
+                    <!-- Statut -->
+                    <td>
+
+                        <span class="status-badge"
+                              th:classappend="${task.status.name() == 'TO_DO'} ? ' status-todo' : (${task.status.name() == 'IN_PROGRESS'} ? ' status-progress' : ' status-done')"
+                              th:text="${task.status.name() == 'TO_DO'} ? #{task.status.todo} : (${task.status.name() == 'IN_PROGRESS'} ? #{task.status.progress} : #{task.status.done})">
+                            Statut
+                        </span>
+
+                    </td>
+
+                    <!-- Actions -->
+                    <td>
+
+                        <div class="task-actions">
+
+                            <!-- Modifier -->
+                            <a th:href="@{/tasks/{id}/edit(id=${task.id})}"
+                               class="btn btn-secondary btn-sm"
+                               th:text="#{task.edit}">
+                                Modifier
+                            </a>
+
+                            <!-- Supprimer -->
+                            <form th:action="@{/tasks/{id}/delete(id=${task.id})}"
+                                  method="post"
+                                  class="delete-form"
+                                  data-confirm-delete
+                                  th:attr="data-confirm-message=#{task.delete.confirm(${task.title})},
+                                           data-warning-message=#{task.delete.warning}">
+
+                                <button type="submit"
+                                        class="btn btn-danger btn-sm"
+                                        th:text="#{task.delete}">
+                                    Supprimer
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- JavaScript -->
+<script th:src="@{/js/app.js}" defer></script>
+
 </body>
 </html>

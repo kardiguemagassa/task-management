@@ -1,51 +1,191 @@
+
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      th:lang="${#locale.language}">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Formulaire de tâche</title>
+
+  <title th:text="${taskId == null} ? #{form.create.title} + ' | TaskFlow' : #{form.edit.title} + ' | TaskFlow'">
+    Formulaire | TaskFlow
+  </title>
+
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
 
-<h1 th:text="${taskId == null} ? 'Créer une tâche' : 'Modifier une tâche'">
-  Formulaire
-</h1>
+<!-- Header -->
+<div th:replace="~{fragments/header :: header}"></div>
 
-<form th:object="${task}"
-      th:action="${taskId == null} ? @{/tasks} : @{/tasks/{id}(id=${taskId})}"
-      method="post">
+<main class="container">
 
-  <div>
-    <label for="title">Titre *</label>
-    <input type="text" id="title" th:field="*{title}" required>
+  <!-- En-tête de la page -->
+  <section class="page-header">
 
-    <p th:if="${#fields.hasErrors('title')}"
-       th:errors="*{title}"></p>
-  </div>
+    <div>
+      <h1 th:text="${taskId == null} ? #{form.create.title} : #{form.edit.title}">
+        Créer une tâche
+      </h1>
 
-  <div>
-    <label for="description">Description</label>
-    <textarea id="description" th:field="*{description}"></textarea>
-  </div>
+      <p class="page-subtitle"
+         th:text="${taskId == null} ? #{form.create.subtitle} : #{form.edit.subtitle}">
+        Renseignez les informations de votre tâche.
+      </p>
+    </div>
 
-  <div>
-    <label for="dueDate">Date d'échéance</label>
-    <input type="date" id="dueDate" th:field="*{dueDate}">
-  </div>
+  </section>
 
-  <div>
-    <label for="status">Statut</label>
-    <select id="status" th:field="*{status}">
-      <option th:each="status : ${statuses}"
-              th:value="${status}"
-              th:text="${status}">
-      </option>
-    </select>
-  </div>
+  <!-- Formulaire -->
+  <section class="form-page">
 
-  <button type="submit">Enregistrer</button>
-  <a th:href="@{/tasks}">Annuler</a>
-</form>
+    <div class="form-card">
+
+      <form th:object="${task}"
+            th:action="${taskId == null} ? @{/tasks} : @{/tasks/{id}(id=${taskId})}"
+            method="post"
+            novalidate>
+
+        <!-- Titre -->
+        <div class="form-group">
+
+          <label for="title"
+                 th:text="#{task.title}">
+            Titre
+          </label>
+
+          <input type="text"
+                 id="title"
+                 th:field="*{title}"
+                 class="form-control"
+                 th:classappend="${#fields.hasErrors('title')} ? 'is-invalid' : ''"
+                 th:placeholder="#{form.title.placeholder}"
+                 maxlength="150"
+                 required>
+
+          <!-- Erreurs de validation du titre -->
+          <div class="field-error"
+               th:if="${#fields.hasErrors('title')}"
+               th:errors="*{title}">
+            Erreur de validation
+          </div>
+
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+
+          <label for="description"
+                 th:text="#{task.description}">
+            Description
+          </label>
+
+          <textarea id="description"
+                    th:field="*{description}"
+                    class="form-control"
+                    th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''"
+                    th:placeholder="#{form.description.placeholder}"
+                    rows="5"></textarea>
+
+          <!-- Erreurs de validation de la description -->
+          <div class="field-error"
+               th:if="${#fields.hasErrors('description')}"
+               th:errors="*{description}">
+            Erreur de validation
+          </div>
+
+        </div>
+
+        <!-- Date d'échéance -->
+        <div class="form-group">
+
+          <label for="dueDate"
+                 th:text="#{task.dueDate}">
+            Échéance
+          </label>
+
+          <input type="date"
+                 id="dueDate"
+                 th:field="*{dueDate}"
+                 class="form-control"
+                 th:classappend="${#fields.hasErrors('dueDate')} ? 'is-invalid' : ''">
+
+          <!-- Erreurs de validation de la date -->
+          <div class="field-error"
+               th:if="${#fields.hasErrors('dueDate')}"
+               th:errors="*{dueDate}">
+            Erreur de validation
+          </div>
+
+        </div>
+
+        <!-- Statut -->
+        <div class="form-group">
+
+          <label for="status"
+                 th:text="#{task.status}">
+            Statut
+          </label>
+
+          <select id="status"
+                  th:field="*{status}"
+                  class="form-control"
+                  th:classappend="${#fields.hasErrors('status')} ? 'is-invalid' : ''"
+                  required>
+
+            <option value=""
+                    th:text="#{form.status.select}">
+              Choisissez un statut
+            </option>
+
+            <option th:each="status : ${statuses}"
+                    th:value="${status}"
+                    th:text="${status.name() == 'TO_DO'} ? #{task.status.todo} : (${status.name() == 'IN_PROGRESS'} ? #{task.status.progress} : #{task.status.done})">
+            </option>
+
+          </select>
+
+          <!-- Erreurs de validation du statut -->
+          <div class="field-error"
+               th:if="${#fields.hasErrors('status')}"
+               th:errors="*{status}">
+            Erreur de validation
+          </div>
+
+        </div>
+
+        <!-- Boutons -->
+        <div class="form-actions">
+
+          <a th:href="@{/tasks}"
+             class="btn btn-secondary"
+             th:text="#{task.cancel}">
+            Annuler
+          </a>
+
+          <button type="submit"
+                  class="btn btn-primary"
+                  th:text="${taskId == null} ? #{form.create.button} : #{form.edit.button}">
+            Enregistrer
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </section>
+
+</main>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- JavaScript -->
+<script th:src="@{/js/app.js}" defer></script>
 
 </body>
 </html>

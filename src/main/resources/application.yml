@@ -18,3 +18,7 @@ spring:
       ddl-auto: update
     open-in-view: false
     show-sql: true
+
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8

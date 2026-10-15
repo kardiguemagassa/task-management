@@ -1,3 +1,4 @@
+
 package com.kmgtechnologies.taskmanagement.model;
 
 import jakarta.persistence.*;
@@ -13,8 +14,8 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Le titre est obligatoire")
-    @Size(max = 150, message = "Le titre ne doit pas dépasser 150 caractères")
+    @NotBlank(message = "{task.validation.title.required}")
+    @Size(max = 150, message = "{task.validation.title.size}")
     @Column(nullable = false, length = 150)
     private String title;
 
