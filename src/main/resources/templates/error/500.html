@@ -1,33 +1,53 @@
 
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      th:lang="${#locale.language}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Erreur serveur | TaskFlow</title>
+
+    <title>500 | TaskFlow</title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
 
+<!-- Header -->
 <div th:replace="~{fragments/header :: header}"></div>
 
 <main class="container">
+
     <section class="error-page">
+
+        <!-- Code erreur -->
         <div class="error-code">500</div>
 
-        <h1>Une erreur est survenue</h1>
+        <!-- Titre -->
+        <h1 th:text="#{error.server.title}">
+            Une erreur est survenue
+        </h1>
 
-        <p>
+        <!-- Description -->
+        <p th:text="#{error.server.description}">
             Nous rencontrons un problème technique.
             Veuillez réessayer dans quelques instants.
         </p>
 
-        <a th:href="@{/tasks}" class="btn btn-primary">
+        <!-- Retour -->
+        <a th:href="@{/tasks}"
+           class="btn btn-primary"
+           th:text="#{error.back}">
             Retour aux tâches
         </a>
+
     </section>
+
 </main>
 
+<!-- Footer -->
 <div th:replace="~{fragments/footer :: footer}"></div>
 
 </body>

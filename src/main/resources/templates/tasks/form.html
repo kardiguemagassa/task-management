@@ -1,11 +1,14 @@
+
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      th:lang="${#locale.language}">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title th:text="${taskId == null} ? 'Créer une tâche | TaskFlow' : 'Modifier une tâche | TaskFlow'">
+  <title th:text="${taskId == null} ? #{form.create.title} + ' | TaskFlow' : #{form.edit.title} + ' | TaskFlow'">
     Formulaire | TaskFlow
   </title>
 
@@ -18,21 +21,22 @@
 
 <main class="container">
 
+  <section class="page-header">
+    <div>
+      <h1 th:text="${taskId == null} ? #{form.create.title} : #{form.edit.title}">
+        Créer une tâche
+      </h1>
+
+      <p class="page-subtitle"
+         th:text="${taskId == null} ? #{form.create.subtitle} : #{form.edit.subtitle}">
+        Renseignez les informations de votre tâche.
+      </p>
+    </div>
+  </section>
+
   <section class="form-page">
 
-    <div class="page-header">
-      <div>
-        <h1 th:text="${taskId == null} ? 'Créer une tâche' : 'Modifier une tâche'">
-          Formulaire
-        </h1>
-
-        <p class="page-subtitle">
-          Renseignez les informations de votre tâche.
-        </p>
-      </div>
-    </div>
-
-    <div class="card form-card">
+    <div class="form-card">
 
       <form th:object="${task}"
             th:action="${taskId == null} ? @{/tasks} : @{/tasks/{id}(id=${taskId})}"
@@ -41,46 +45,52 @@
         <!-- Titre -->
         <div class="form-group">
 
-          <label for="title">
-            Titre <span class="required">*</span>
+          <label for="title" th:text="#{task.title}">
+            Titre
           </label>
 
           <input type="text"
                  id="title"
                  th:field="*{title}"
                  class="form-control"
-                 th:classappend="${#fields.hasErrors('title')} ? ' is-invalid'"
-                 placeholder="Ex. : Terminer le projet Spring Boot"
+                 th:placeholder="#{form.title.placeholder}"
                  maxlength="150"
                  required>
 
-          <p class="field-error"
-             th:if="${#fields.hasErrors('title')}"
-             th:errors="*{title}">
-          </p>
+          <div th:if="${#fields.hasErrors('title')}"
+               class="field-error"
+               th:errors="*{title}">
+          </div>
 
         </div>
 
         <!-- Description -->
         <div class="form-group">
 
-          <label for="description">
+          <label for="description"
+                 th:text="#{task.description}">
             Description
           </label>
 
           <textarea id="description"
                     th:field="*{description}"
                     class="form-control"
-                    rows="5"
-                    placeholder="Décrivez votre tâche..."></textarea>
+                    th:placeholder="#{form.description.placeholder}"
+                    rows="5"></textarea>
+
+          <div th:if="${#fields.hasErrors('description')}"
+               class="field-error"
+               th:errors="*{description}">
+          </div>
 
         </div>
 
-        <!-- Date d'échéance -->
+        <!-- Échéance -->
         <div class="form-group">
 
-          <label for="dueDate">
-            Date d'échéance
+          <label for="dueDate"
+                 th:text="#{task.dueDate}">
+            Échéance
           </label>
 
           <input type="date"
@@ -88,35 +98,42 @@
                  th:field="*{dueDate}"
                  class="form-control">
 
-          <p class="field-error"
-             th:if="${#fields.hasErrors('dueDate')}"
-             th:errors="*{dueDate}">
-          </p>
+          <div th:if="${#fields.hasErrors('dueDate')}"
+               class="field-error"
+               th:errors="*{dueDate}">
+          </div>
 
         </div>
 
         <!-- Statut -->
         <div class="form-group">
 
-          <label for="status">
+          <label for="status"
+                 th:text="#{task.status}">
             Statut
           </label>
 
           <select id="status"
                   th:field="*{status}"
-                  class="form-control">
+                  class="form-control"
+                  required>
+
+            <option value=""
+                    th:text="#{form.status.select}">
+              Choisissez un statut
+            </option>
 
             <option th:each="status : ${statuses}"
                     th:value="${status}"
-                    th:text="${status.name() == 'TO_DO'} ? 'À faire' : (${status.name() == 'IN_PROGRESS'} ? 'En cours' : 'Terminée')">
+                    th:text="${status.name() == 'TO_DO'} ? #{task.status.todo} : (${status.name() == 'IN_PROGRESS'} ? #{task.status.progress} : #{task.status.done})">
             </option>
 
           </select>
 
-          <p class="field-error"
-             th:if="${#fields.hasErrors('status')}"
-             th:errors="*{status}">
-          </p>
+          <div th:if="${#fields.hasErrors('status')}"
+               class="field-error"
+               th:errors="*{status}">
+          </div>
 
         </div>
 
@@ -124,13 +141,14 @@
         <div class="form-actions">
 
           <a th:href="@{/tasks}"
-             class="btn btn-secondary">
+             class="btn btn-secondary"
+             th:text="#{task.cancel}">
             Annuler
           </a>
 
           <button type="submit"
                   class="btn btn-primary"
-                  th:text="${taskId == null} ? 'Créer la tâche' : 'Enregistrer les modifications'">
+                  th:text="${taskId == null} ? #{form.create.button} : #{task.save}">
             Enregistrer
           </button>
 

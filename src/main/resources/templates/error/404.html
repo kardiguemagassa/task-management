@@ -1,33 +1,53 @@
 
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      th:lang="${#locale.language}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Page introuvable | TaskFlow</title>
+
+    <title>404 | TaskFlow</title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
 
+<!-- Header -->
 <div th:replace="~{fragments/header :: header}"></div>
 
 <main class="container">
+
     <section class="error-page">
+
+        <!-- Code erreur -->
         <div class="error-code">404</div>
 
-        <h1>Oups ! Page introuvable</h1>
+        <!-- Titre -->
+        <h1 th:text="#{error.notFound.title}">
+            Oups ! Page introuvable
+        </h1>
 
-        <p>
+        <!-- Description -->
+        <p th:text="#{error.notFound.description}">
             La page que vous recherchez n'existe pas
             ou n'est plus disponible.
         </p>
 
-        <a th:href="@{/tasks}" class="btn btn-primary">
+        <!-- Retour -->
+        <a th:href="@{/tasks}"
+           class="btn btn-primary"
+           th:text="#{error.back}">
             Retour aux tâches
         </a>
+
     </section>
+
 </main>
 
+<!-- Footer -->
 <div th:replace="~{fragments/footer :: footer}"></div>
 
 </body>

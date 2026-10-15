@@ -585,3 +585,30 @@ textarea.form-control {
     margin: 0 0 30px;
     color: var(--muted);
 }
+
+
+/* LANGUAGE SWITCHER */
+
+.language-switcher {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 16px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.language-switcher a {
+    color: #64748b;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.language-switcher a:hover,
+.language-switcher a.active {
+    color: #4f46e5;
+}
+
+.language-switcher span {
+    color: #cbd5e1;
+}
