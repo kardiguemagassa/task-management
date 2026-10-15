@@ -44,14 +44,14 @@
 
     </section>
 
-    <!-- Message de confirmation -->
+    <!-- Message de succès -->
     <div th:if="${successMessage}"
          class="alert alert-success"
          role="status"
          th:text="${successMessage}">
     </div>
 
-    <!-- État vide : aucune tâche -->
+    <!-- Aucune tâche -->
     <section th:if="${#lists.isEmpty(tasks)}"
              class="empty-state">
 
@@ -170,7 +170,8 @@
                                   method="post"
                                   class="delete-form"
                                   data-confirm-delete
-                                  th:attr="data-task-title=${task.title}">
+                                  th:attr="data-confirm-message=#{task.delete.confirm(${task.title})},
+                                           data-warning-message=#{task.delete.warning}">
 
                                 <button type="submit"
                                         class="btn btn-danger btn-sm"

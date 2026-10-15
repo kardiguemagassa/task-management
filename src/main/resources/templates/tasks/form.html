@@ -17,11 +17,14 @@
 
 <body>
 
+<!-- Header -->
 <div th:replace="~{fragments/header :: header}"></div>
 
 <main class="container">
 
+  <!-- En-tête de la page -->
   <section class="page-header">
+
     <div>
       <h1 th:text="${taskId == null} ? #{form.create.title} : #{form.edit.title}">
         Créer une tâche
@@ -32,20 +35,24 @@
         Renseignez les informations de votre tâche.
       </p>
     </div>
+
   </section>
 
+  <!-- Formulaire -->
   <section class="form-page">
 
     <div class="form-card">
 
       <form th:object="${task}"
             th:action="${taskId == null} ? @{/tasks} : @{/tasks/{id}(id=${taskId})}"
-            method="post">
+            method="post"
+            novalidate>
 
         <!-- Titre -->
         <div class="form-group">
 
-          <label for="title" th:text="#{task.title}">
+          <label for="title"
+                 th:text="#{task.title}">
             Titre
           </label>
 
@@ -53,13 +60,16 @@
                  id="title"
                  th:field="*{title}"
                  class="form-control"
+                 th:classappend="${#fields.hasErrors('title')} ? 'is-invalid' : ''"
                  th:placeholder="#{form.title.placeholder}"
                  maxlength="150"
                  required>
 
-          <div th:if="${#fields.hasErrors('title')}"
-               class="field-error"
+          <!-- Erreurs de validation du titre -->
+          <div class="field-error"
+               th:if="${#fields.hasErrors('title')}"
                th:errors="*{title}">
+            Erreur de validation
           </div>
 
         </div>
@@ -75,17 +85,20 @@
           <textarea id="description"
                     th:field="*{description}"
                     class="form-control"
+                    th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''"
                     th:placeholder="#{form.description.placeholder}"
                     rows="5"></textarea>
 
-          <div th:if="${#fields.hasErrors('description')}"
-               class="field-error"
+          <!-- Erreurs de validation de la description -->
+          <div class="field-error"
+               th:if="${#fields.hasErrors('description')}"
                th:errors="*{description}">
+            Erreur de validation
           </div>
 
         </div>
 
-        <!-- Échéance -->
+        <!-- Date d'échéance -->
         <div class="form-group">
 
           <label for="dueDate"
@@ -96,11 +109,14 @@
           <input type="date"
                  id="dueDate"
                  th:field="*{dueDate}"
-                 class="form-control">
+                 class="form-control"
+                 th:classappend="${#fields.hasErrors('dueDate')} ? 'is-invalid' : ''">
 
-          <div th:if="${#fields.hasErrors('dueDate')}"
-               class="field-error"
+          <!-- Erreurs de validation de la date -->
+          <div class="field-error"
+               th:if="${#fields.hasErrors('dueDate')}"
                th:errors="*{dueDate}">
+            Erreur de validation
           </div>
 
         </div>
@@ -116,6 +132,7 @@
           <select id="status"
                   th:field="*{status}"
                   class="form-control"
+                  th:classappend="${#fields.hasErrors('status')} ? 'is-invalid' : ''"
                   required>
 
             <option value=""
@@ -130,14 +147,16 @@
 
           </select>
 
-          <div th:if="${#fields.hasErrors('status')}"
-               class="field-error"
+          <!-- Erreurs de validation du statut -->
+          <div class="field-error"
+               th:if="${#fields.hasErrors('status')}"
                th:errors="*{status}">
+            Erreur de validation
           </div>
 
         </div>
 
-        <!-- Actions -->
+        <!-- Boutons -->
         <div class="form-actions">
 
           <a th:href="@{/tasks}"
@@ -148,7 +167,7 @@
 
           <button type="submit"
                   class="btn btn-primary"
-                  th:text="${taskId == null} ? #{form.create.button} : #{task.save}">
+                  th:text="${taskId == null} ? #{form.create.button} : #{form.edit.button}">
             Enregistrer
           </button>
 
@@ -162,8 +181,10 @@
 
 </main>
 
+<!-- Footer -->
 <div th:replace="~{fragments/footer :: footer}"></div>
 
+<!-- JavaScript -->
 <script th:src="@{/js/app.js}" defer></script>
 
 </body>
