@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Erreur serveur | TaskFlow</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="container">
+    <section class="error-page">
+        <div class="error-code">500</div>
+
+        <h1>Une erreur est survenue</h1>
+
+        <p>
+            Nous rencontrons un problème technique.
+            Veuillez réessayer dans quelques instants.
+        </p>
+
+        <a th:href="@{/tasks}" class="btn btn-primary">
+            Retour aux tâches
+        </a>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

@@ -552,3 +552,36 @@ textarea.form-control {
     cursor: not-allowed;
     transform: none;
 }
+
+
+/* ERROR PAGES */
+
+.error-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: 48px 20px;
+    text-align: center;
+}
+
+.error-code {
+    color: var(--primary);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(6rem, 15vw, 10rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.08em;
+}
+
+.error-page h1 {
+    margin: 24px 0 12px;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+}
+
+.error-page p {
+    max-width: 450px;
+    margin: 0 0 30px;
+    color: var(--muted);
+}
