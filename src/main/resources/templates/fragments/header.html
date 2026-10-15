@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<header th:fragment="header" class="app-header">
+    <div class="container header-content">
+        <a th:href="@{/tasks}" class="logo">
+            <span class="logo-icon">✓</span>
+            TaskFlow
+        </a>
+
+        <nav class="main-nav" aria-label="Navigation principale">
+            <a th:href="@{/tasks}">Mes tâches</a>
+            <a th:href="@{/tasks/new}">Nouvelle tâche</a>
+        </nav>
+    </div>
+</header>
+
+</body>
+</html>
